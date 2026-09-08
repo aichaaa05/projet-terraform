@@ -1,13 +1,28 @@
+locals {
+  name_prefix = "${var.prefix}-${var.environment}"
+
+  common_labels = {
+    environment = var.environment
+    managed_by  = "terraform"
+    owner       = var.prefix
+  }
+}
+
 data "google_compute_image" "debian" {
-  family  = "debian-12"
+  family  = "debian-13"
   project = "debian-cloud"
 }
 
-resource "google_compute_instance" "web" {
-  count = 2
+data "google_compute_subnetwork" "main" {
+  name   = "${var.prefix}-subnet"
+  region = var.region
+}
 
-  name         = "acjc-web-${count.index + 1}"
-  machine_type = "e2-micro"
+resource "google_compute_instance" "web" {
+  count = var.instance_count
+
+  name         = "${local.name_prefix}-web-${format("%02d", count.index + 1)}"
+  machine_type = var.machine_type
   zone         = var.zone
 
   tags = [
@@ -15,21 +30,26 @@ resource "google_compute_instance" "web" {
     "iap-ssh"
   ]
 
+  labels = local.common_labels
+
   boot_disk {
     initialize_params {
       image = data.google_compute_image.debian.self_link
+      size  = 10
+      type  = "pd-balanced"
     }
   }
 
   network_interface {
-    network = var.network_name
+    subnetwork = data.google_compute_subnetwork.main.self_link
 
     access_config {}
   }
 
   service_account {
-    email  = var.service_account_email
+    email  = google_service_account.web.email
     scopes = ["cloud-platform"]
   }
-}
 
+  metadata_startup_script = file("${path.module}/startup.sh")
+}
