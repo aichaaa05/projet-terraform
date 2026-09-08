@@ -1,14 +1,11 @@
 
-variable "zone" {
-  type    = string
-}
-
 variable "network_name" {
   type = string
 }
 
 variable "service_account_email" {
   type = string
+}
 
 variable "project_id" {
   description = "Identifiant du projet Google Cloud"

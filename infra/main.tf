@@ -31,5 +31,8 @@ resource "google_compute_instance" "web" {
     email  = var.service_account_email
     scopes = ["cloud-platform"]
   }
+
+  metadata_startup_script = file("${path.module}/startup.sh")
+
 }
 
