@@ -6,7 +6,6 @@
 .terraform/
 
 # Variable files
-*.tfvars
 
 # Log files
 *.log
