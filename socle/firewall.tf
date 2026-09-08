@@ -1,4 +1,4 @@
-resource "google_compute_firewall" "web" {
+resource "google_compute_firewall" "ssh-iap" {
   name    = "acjc-tf-allow-ssh-iap"
   network = google_compute_network.main.name
 
