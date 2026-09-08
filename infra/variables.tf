@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 variable "zone" {
   type    = string
 }
@@ -9,7 +9,7 @@ variable "network_name" {
 
 variable "service_account_email" {
   type = string
-=======
+
 variable "project_id" {
   description = "Identifiant du projet Google Cloud"
   type        = string
@@ -48,5 +48,4 @@ variable "machine_type" {
 variable "instance_count" {
   description = "Nombre de machines web"
   type        = number
->>>>>>> 215cd33f4e915545efcbbe2c85a119b2df2ba0a3
 }
